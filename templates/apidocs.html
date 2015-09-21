@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Who Sent This</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Who Sent This?</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('about')}}">About</a></li>
+            <li><a href="{{url_for('submit')}}">Submit</a></li>
+            <li class="active"><a href="{{url_for('api')}}">API</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="container">
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div style="padding-top:10%;" class="lead">
+      <h1>API Documentation</h1>
+      <h3>Reports</h3>
+      <ul>
+      <li><a href="#GET">GET -- Read existing reports</a></li>
+      <li><a href="#POST">POST -- Create new report</a></li>
+      </ul>
+      <div><code id="GET">GET {{url_for('apireports', _external=True)}}</code></div>
+      <div>Returns a listing of non-personally identifying information for the most recent spam reports recorded.</div>
+      <div><pre>
+curl -X GET {{url_for('apireports', _external=True)}}
+
+{
+  "items": [
+    {
+      "created_at": "Sat, 27 Jun 2015 19:33:36 GMT",
+      "dkim_pass": true,
+      "dmarc_pass": true,
+      "header_id": 12,
+      "return_path": "bounces+13641-11e8-nathan.ranson=mailchimp.com@email.uber.com",
+      "sender_abuse": "postmaster@uber.com",
+      "sender_host": "o15.email.uber.com",
+      "sender_ip": "50.31.36.149",
+      "spf_pass": true
+    },
+    ...
+  ]
+}
+      </pre></div>
+            <div><code id="GET">GET {{url_for('apireport', header=32, _external=True)}}</code></div>
+      <div>Returns a listing of non-personally identifying information for a specific spam email based on header_id.</div>
+      <div><pre>
+curl -X POST -d "{'...'}" {{url_for('apireport', header=32, _external=True)}}
+
+{
+  "created_at": "2015-06-27 20:03:29", 
+  "dkim_pass": true, 
+  "dmarc_pass": true, 
+  "header_id": 32, 
+  "return_path": "ECRMOM+122453+4257901268+AB32F5E0-72F4-ECD5-BB15-580D51CA1B06@ecrmemail.verizonwireless.com", 
+  "sender_abuse": "abuse@verizonwireless.com", 
+  "sender_host": "nord.verizonwireless.com", 
+  "sender_ip": "137.188.104.187", 
+  "spf_pass": true
+}
+      </pre></div>
+
+      <div><code id="POST">POST {{url_for('apireports', _external=True)}}</code></div>
+      <div>Adds a new spam report to the database. The email header can be passed as a string within a JSON object. After a successful POST, the object will be parsed and returned back to you.</div>
+      <div><pre>
+curl -X POST -d "{'...'}" {{url_for('apireports', _external=True)}}
+
+{
+  "created_at": "2015-06-27 20:03:29", 
+  "dkim_pass": true, 
+  "dmarc_pass": true, 
+  "header_id": 32, 
+  "return_path": "ECRMOM+122453+4257901268+AB32F5E0-72F4-ECD5-BB15-580D51CA1B06@ecrmemail.verizonwireless.com", 
+  "sender_abuse": "abuse@verizonwireless.com", 
+  "sender_host": "nord.verizonwireless.com", 
+  "sender_ip": "137.188.104.187", 
+  "spf_pass": true
+}
+      </pre></div>
+      </div>
+    </div> <!-- /container -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  </body>
+</html>
